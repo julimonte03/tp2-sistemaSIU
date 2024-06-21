@@ -31,8 +31,8 @@ public class SistemaSIU {
             }
         }
 
-        for (String estudiante : libretasUniversitarias) { //O(1) estudiante es acotado
-            estudiantes.insertarClave(estudiante, new Estudiante()); //O(1)
+        for (String estudiante : libretasUniversitarias) { //O(|libretasUniversitarias|) 
+            estudiantes.insertarClave(estudiante, new Estudiante()); //O(1) estudiante es acotado
         }
     }
     //Para todo c en carreras: acceder a cada infoMateria  cuesta O(|c|) por cada materia con distinto nombre de esa materia = O(|c|. |m|). Cumple con la primera parte. Dado que hay E estudiantes y es un término constante que representa la cantidad total de estudiantes y hay que inscribirlos en n nombres distintos de la materia, es decir el ultimo bucle depende de la cantidad de nombres distintos de la materia -> O(|n| + E) es la complejidad para cada n en nombre de materias. Cumple la segunda parte.
@@ -40,23 +40,23 @@ public class SistemaSIU {
     public void inscribir(String estudiante, String carrera, String materia) {
         Materia materiaInscribir = carreras.buscar(carrera).buscar(materia); //O(|c| + |m|)
         Estudiante estudianteInscribir = estudiantes.buscar(estudiante); //O(|n|)
-        estudianteInscribir.inscribirMateria(); //O(|1|)
+        estudianteInscribir.inscribirMateria(); //O(1)
         materiaInscribir.añadirInscripto(estudianteInscribir); //O(|1|)
     }
     //complejidad total : O(|c| + |m| ) + O(|1|) = O(|c| + |m|)
 
     public void agregarDocente(CargoDocente cargo, String carrera, String materia) {
         Trie<Materia> materias = carreras.buscar(carrera);//O(|c|)
-        if (materias == null) { //O(|1|)
+        if (materias == null) { //O(1)
             throw new NoSuchElementException("Carrera no encontrada: " + carrera);
         }
     
         Materia materiaAgregar = materias.buscar(materia);//O(|m|)
-        if (materiaAgregar == null) {//O(|1|)
+        if (materiaAgregar == null) {//O(1)
             throw new NoSuchElementException("Materia no encontrada: " + materia);
         }
     
-        switch (cargo) {//O(|1|)
+        switch (cargo) {//O(1)
             case PROF:
                 materiaAgregar.añadirPROF();
                 break;
@@ -77,7 +77,7 @@ public class SistemaSIU {
 
     public int[] plantelDocente(String materia, String carrera) {
         Materia materiaDocentes = carreras.buscar(carrera).buscar(materia); //O(|c| + |m|)
-        if (materiaDocentes == null) {//O(|1|)
+        if (materiaDocentes == null) {//O(1)
             throw new NoSuchElementException("Materia no encontrada: " + materia);
         }
         return materiaDocentes.cantidadDocentes();
@@ -93,7 +93,7 @@ public class SistemaSIU {
             materias = par.carrera; //O(1)
             materias.borrar(nombre);//O(|m|)
         }
-        ArrayList<Estudiante> listaAlumnos = materiaObj.listaAlumnos(); //O(E) cantidad de estudiantes 
+        ArrayList<Estudiante> listaAlumnos = materiaObj.listaAlumnos(); //O(1) 
         for(Estudiante alumno : listaAlumnos){ //O(E)
             alumno.borrarMateria();
         }
@@ -151,7 +151,7 @@ public class SistemaSIU {
     }
 
 
-    public int materiasInscriptas(String estudiante) { //O(1) porque estudiante es acotado y en un trie cuesta O(1)
+    public int materiasInscriptas(String estudiante) { //O(1) porque estudiante es acotado y en un trie cuesta O(1) si esta acotado
         Estudiante e = estudiantes.buscar(estudiante); 
         return e.getCantidadMaterias();
         }
